@@ -53,7 +53,7 @@ class Plugino extends i8Core {
 		register_uninstall_hook($this->__FILE__, '_uninstall');
 		
 		if (method_exists($this, '_activate'))
-			$this->_activate();
+			$this->_activate($this->i8_data);
 	}
 	
 	

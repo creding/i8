@@ -427,33 +427,33 @@ class i8Core {
 
     function pa_admin_notices()
     {
-            if ( empty($this->msgs) ) return;
-
-            foreach ($this->msgs as $msg)  {
-                    ?><div class="<?php echo $msg['class']; ?>"><p><?php echo $msg['message']; ?></p></div><?php
-
-                    if ($msg['critical'])
-                            $this->deactivate();
-            }
+		if ( empty($this->msgs) ) return;
+		
+		foreach ($this->msgs as $msg)  {
+			?><div class="<?php echo $msg['class']; ?>"><p><?php echo $msg['message']; ?></p></div><?php
+		
+			if ($msg['critical'])
+				$this->deactivate();
+		}
     }
 
 
     // Options Management
     function _options_register()
     {
-            register_setting($this->options_handle, $this->options_handle, array(&$this, 'options_validate'));
+		register_setting($this->options_handle, $this->options_handle, array(&$this, 'options_validate'));
     }
 
 
     function o($name, $value = false)
     {
-            if (func_num_args() == 1)
-                    return $this->options[$name];
-            else
-            {
-                    $this->options[$name] = $value;
-                    $this->options_update();
-            }
+		if (func_num_args() == 1)
+			return $this->options[$name];
+		else
+		{
+			$this->options[$name] = $value;
+			$this->options_update();
+		}
     }
 
 
@@ -465,84 +465,84 @@ class i8Core {
 
     function options_init()
     {
-            $this->options_handle = "{$this->namespace}options";
-            $this->options_get(true);
+		$this->options_handle = "{$this->namespace}options";
+		$this->options_get(true);
     }
 
 
     function options_validate($input)
     {
-            # take care of password fields, which are emptied on show for security reasons
-            foreach ($input as $name => $o)
-                    if (empty($o['value']) && 'password' == $this->options[$name]['type']) {
-                            $input[$name]['value'] = $this->options[$name]['value'];
-                    }
+		# take care of password fields, which are emptied on show for security reasons
+		foreach ($input as $name => $o)
+			if (empty($o['value']) && 'password' == $this->options[$name]['type']) {
+				$input[$name]['value'] = $this->options[$name]['value'];
+			}
 
-            return apply_filters("i8_options_validate_{$this->classname}", $input);
+		return apply_filters("i8_options_validate_{$this->classname}", $input);
     }
 
 
     function options_get($from_db = false)
     {
-            if (!$from_db && !empty($this->options))
-                    return $this->options;
+		if (!$from_db && !empty($this->options))
+			return $this->options;
 
-            if (empty($this->defaults))
-                    $this->defaults = $this->options;
+		if (empty($this->defaults))
+			$this->defaults = $this->options;
 
-            return $this->options = array_merge_better($this->options, get_option($this->options_handle));
+		return $this->options = array_merge_better($this->options, get_option($this->options_handle));
     }
 
 
     function options_update()
     {
-            if (!empty($this->options))
-                    update_option($this->options_handle, $this->options);
+		if (!empty($this->options))
+			update_option($this->options_handle, $this->options);
     }
 
 
     function options_form()
     {
-            if (empty($this->options))
-                    return;
-?>
-<form method="post" action="options.php">
-<?php settings_fields($this->options_handle); ?>
-
-<table class="form-table">
-<?php foreach ($this->options as $name => $o) :  ?>
-<tr valign="top">
-    <th scope="row"><label><?php echo $o['label']; ?></label></th>
-    <td>
-                    <?php if (!empty($o['type'])) {
-            $method = "options_field_{$o['type']}";
-                            if (method_exists($this, $method))
-                                    $this->$method($name, $o);
-        } ?>
-    </td>
-</tr>
-    <?php endforeach; ?>
-</table>  
-
-<p class="submit">
-<input type="submit" name="Submit" class="button-primary" value="Save" />
-</p>
-
-</form>	
-<?php	
+		if (empty($this->options))
+			return;
+		?>
+		<form method="post" action="options.php">
+		<?php settings_fields($this->options_handle); ?>
+		
+		<table class="form-table">
+		<?php foreach ($this->options as $name => $o) :  ?>
+		<tr valign="top">
+			<th scope="row"><label><?php echo $o['label']; ?></label></th>
+			<td>
+			<?php if (!empty($o['type'])) {
+				$method = "options_field_{$o['type']}";
+				if (method_exists($this, $method))
+					$this->$method($name, $o);
+			} ?>
+			</td>
+		</tr>
+		<?php endforeach; ?>
+		</table>  
+		
+		<p class="submit">
+		<input type="submit" name="Submit" class="button-primary" value="Save" />
+		</p>
+		
+		</form>	
+		<?php	
     }
 
 
     function options_field_text($name, &$o)
     {
-            extract($o);
-            ?><input type="text" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="<?php echo $value; ?>" /> <?php echo $desc;
+		extract($o);
+		?><input type="text" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="<?php echo $value; ?>" /> <?php echo $desc;
     }
 
     function options_field_password($name, &$o)
     {
-            extract($o);
-            ?><input type="password" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="" /> <?php echo $desc;
+		extract($o);
+		?><input type="password" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="" /> <?php echo $desc;
     }
 
 
@@ -550,76 +550,72 @@ class i8Core {
 
     function script_add($params)
     {
-            $this->script_style_add($params);
+		$this->script_style_add($params);
     }
 
 
     function pa_wp_print_scripts()
     {
-            if (empty($this->scripts))
-                    return;
-
-            foreach ($this->scripts as $script) {
-
-                    if ('1' == $script['admin'] && !is_admin() || '-1' == $script['admin'] && is_admin())
-                            continue;
-
-                    wp_enqueue_script($script['id'], $script['url'], $script['deps'], $script['ver'], $script['in_footer']);
-            }
+		if (empty($this->scripts))
+				return;
+		
+		foreach ($this->scripts as $script) {
+			if ('1' == $script['admin'] && !is_admin() || '-1' == $script['admin'] && is_admin())
+				continue;
+			wp_enqueue_script($script['id'], $script['url'], $script['deps'], $script['ver'], $script['in_footer']);
+		}
     }
 
 
     function style_add($params)
     {
-            $this->script_style_add($params, '.css');
+		$this->script_style_add($params, '.css');
     }
 
 
     function pa_admin_print_styles()
     {
-            if (!empty($this->styles))
-                    $this->wp_enqueue_styles();
+		if (!empty($this->styles))
+			$this->wp_enqueue_styles();
     }
 
 
     function pa_wp_print_styles()
     {
-            if (!empty($this->styles))
-                    $this->wp_enqueue_styles();
+		if (!empty($this->styles))
+			$this->wp_enqueue_styles();
     }
 
 
     function wp_enqueue_styles()
     {
-            foreach ($this->styles as $style) {
-
-                    if ('1' == $script['admin'] && !is_admin() || '-1' == $script['admin'] && is_admin())
-                            continue;
-
-                    wp_enqueue_style($style['id'], $style['url'], $style['deps'], $style['ver'], $style['media']);
-            }
+		foreach ($this->styles as $style) {
+			if ('1' == $script['admin'] && !is_admin() || '-1' == $script['admin'] && is_admin())
+				continue;
+			wp_enqueue_style($style['id'], $style['url'], $style['deps'], $style['ver'], $style['media']);
+		}
     }
 
 
     protected function script_style_add(&$params, $ext = '.js')
     {
-            if (is_string($params))
-                    if ($ext == substr($params, -strlen($ext))) { // has .js extension
-                            $params = array(
-                                    'url' 	=> $params
-                            );
-                    } else
-                            $params = array(
-                                    'id'	=> $params
-                            );
-
-            if (empty($params['id']))
-                    $params['id'] = basename($params['url'], $ext);
-
-            if ($ext == '.js')
-                    $this->scripts[] = $params;
-            else
-                    $this->styles[] = $params;
+		if (is_string($params))
+			if ($ext == substr($params, -strlen($ext))) { // has .js extension
+				$params = array(
+					'url' => $params
+				);
+			} else
+				$params = array(
+					'id' => $params
+				);
+		
+		if (empty($params['id']))
+			$params['id'] = basename($params['url'], $ext);
+		
+		if ($ext == '.js')
+			$this->scripts[] = $params;
+		else
+			$this->styles[] = $params;
     }
 
 
@@ -627,62 +623,61 @@ class i8Core {
 
     function json($output)
     {
-            return $this->output($output, 'json');
+		return $this->output($output, 'json');
     }
 
 
     function output($output, $format = '')
     {
-
-            if ('json' == $format) {
-                    $header = '';
-                    $output = json_encode((array)$output);
-            } elseif ('xml' == $format) {
-                    $header = '';
-                    $output = '';
-            }
-
-            if (DOING_AJAX) {
-                    echo $output;
-                    exit;
-            } else
-                    return $output;
+		if ('json' == $format) {
+			$header = '';
+			$output = json_encode((array)$output);
+		} elseif ('xml' == $format) {
+			$header = '';
+			$output = '';
+		}
+		
+		if (DOING_AJAX) {
+			echo $output;
+			exit;
+		} else
+			return $output;
     }
 
 
     /* Helpers */
     function load($path, $once = true, $buffer = false, $vars = null)
     {
-            if (file_exists($path))
-            {
-                    if (!is_null($vars))
-                            extract($vars);
-
-                    if ($buffer) ob_start();
-
-                    $once ? require_once($path) : include($path);
-
-                    if ($buffer) return ob_get_clean();
-
-                    return;
-            }
-            wp_die("<strong>$path</strong> not found!");
+		if (file_exists($path))
+		{
+			if (!is_null($vars))
+				extract($vars);
+		
+			if ($buffer) ob_start();
+		
+			$once ? require_once($path) : include($path);
+		
+			if ($buffer) return ob_get_clean();
+		
+			return;
+		}
+		wp_die("<strong>$path</strong> not found!");
     }
 
 
-    /* MTB related */
+    /* CRT related */
     function the_base($ctrl, $action, $params = null)
     {
-            echo $this->get_the_base($ctrl, $action, $params);
+		echo $this->get_the_base($ctrl, $action, $params);
     }
 
     function get_the_base($ctrl, $action, $params = null)
     {
-            $querystr = '';
-            if (!empty($params) && is_array($params))
-                    $querystr = '&' . http_build_query($params);
-
-            return admin_url('admin.php') . "?page=$ctrl/$action" . $querystr;
+		$querystr = '';
+		if (!empty($params) && is_array($params))
+			$querystr = '&' . http_build_query($params);
+		
+		return admin_url('admin.php') . "?page=$ctrl/$action" . $querystr;
     }
 
 	
