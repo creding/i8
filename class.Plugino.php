@@ -4,17 +4,25 @@ require_once(dirname(__FILE__) . '/class.i8Core.php');
 
 class Plugino extends i8Core {
 	
+	var $url;
+	var $path;
 	
-	function __construct()
+	var $__FILE__;
+	
+	function __construct($__FILE__ = false)
 	{
 		parent::__construct();
 		
-		# probably it would be cleaner to pass a filename as an argument, but by now this is easier for developer
-		$trace = debug_backtrace(false);
-		$this->__file__ = $trace[1]['file'];
+		if ($__FILE__) {
+			$this->__FILE__ = $__FILE__;	
+		} else {
+			# probably it would be cleaner to pass a filename as an argument, but by now this is easier for developer
+			$trace = debug_backtrace(false);
+			$this->__FILE__ = $trace[1]['file'];
+		}
 		
 		# plugin urls and paths		
-		$plugin_dir = plugin_basename(dirname($this->__file__));
+		$plugin_dir = plugin_basename(dirname($this->__FILE__));
 		$this->url	= WP_PLUGIN_URL . '/' . $plugin_dir;
 		$this->path	= WP_PLUGIN_DIR . '/' . $plugin_dir;
 		
@@ -22,7 +30,7 @@ class Plugino extends i8Core {
 		# check if uninstall has called this, logic will break here, if it has
 		if ($this->_uninstalling())
 		{
-			add_action('uninstall_' . plugin_basename($this->__file__), array($this, '_uninstall'), 0);
+			add_action('uninstall_' . plugin_basename($this->__FILE__), array($this, '_uninstall'), 0);
 			return;
 		}
 		
@@ -30,8 +38,8 @@ class Plugino extends i8Core {
 		if (isset($this->repo))
 			add_filter('transient_update_plugins', array($this, '_check_4_updates'));
 		
-		register_activation_hook( $this->__file__, 		array($this, '_activation_operations') );
-		register_deactivation_hook( $this->__file__, 	array($this, '_deactivation_operations') );
+		register_activation_hook( $this->__FILE__, 		array($this, '_activation_operations') );
+		register_deactivation_hook( $this->__FILE__, 	array($this, '_deactivation_operations') );
 		
 		do_action("i8_{$this->namespace}initialized");
     }
@@ -39,10 +47,10 @@ class Plugino extends i8Core {
 	
 	function _activation_operations()
 	{
-		$this->i8_data = get_plugin_data($this->__file__, false, false);
+		$this->i8_data = get_plugin_data($this->__FILE__, false, false);
 		parent::_activation_operations();
 		
-		register_uninstall_hook($this->__file__, '_uninstall');
+		register_uninstall_hook($this->__FILE__, '_uninstall');
 		
 		if (method_exists($this, '_activate'))
 			$this->_activate();
@@ -58,14 +66,14 @@ class Plugino extends i8Core {
 		register_uninstall_hook, hence this workaround */ 
 		return  $_POST['action'] == 'delete-selected' 	&& 
 				$_POST['verify-delete'] == 1			&& 
-				in_array(plugin_basename($this->__file__), $_POST['checked']); 
+				in_array(plugin_basename($this->__FILE__), $_POST['checked']); 
 	}
 	
 	
 	function _uninstall()
 	{
 		// remove dummy callback
-		remove_action('uninstall_' . plugin_basename($this->__file__), '_uninstall');
+		remove_action('uninstall_' . plugin_basename($this->__FILE__), '_uninstall');
 		
 		if (!current_user_can('delete_plugins'))
 			return;
