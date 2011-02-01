@@ -268,10 +268,10 @@ class i8Core {
             $title_sanitized = sanitize_with_underscores($page_title);
 
             $defaults = array(
-                'handle' 		=> "page_$title_sanitized",
-                'callback'		=> array(&$this, "page_$title_sanitized"),
-                'capability'	=> 10,
-                'icon_url'		=> ''
+                'handle' => "page_$title_sanitized",
+                'callback' => array(&$this, "page_$title_sanitized"),
+                'capability' => 10,
+                'icon_url' => ''
             );
             extract($this->pages[$i] = wp_parse_args($this->pages[$i], $defaults));
 
@@ -283,16 +283,16 @@ class i8Core {
                     $parent = $this->pages[$parent]['handle'];
                 else {
                     $predefined = array(
-                        'management' 	=> 'tools.php',
-                        'options'		=> 'options-general.php',
-                        'theme'			=> 'themes.php',
-                        'users'			=> current_user_can('edit_users') ? 'users.php' : 'profile.php',
-                        'dashboard'		=> 'index.php',
-                        'posts'			=> 'edit.php',
-                        'media'			=> 'upload.php',
-                        'links'			=> 'link-manager.php',
-                        'pages'			=> 'edit-pages.php',
-                        'comments'		=> 'edit-comments.php'
+                        'management' => 'tools.php',
+                        'options' => 'options-general.php',
+                        'theme'	=> 'themes.php',
+                        'users'	=> current_user_can('edit_users') ? 'users.php' : 'profile.php',
+                        'dashboard'	=> 'index.php',
+                        'posts'	=> 'edit.php',
+                        'media'	=> 'upload.php',
+                        'links'	=> 'link-manager.php',
+                        'pages'	=> 'edit-pages.php',
+                        'comments' => 'edit-comments.php'
                     );
                     $parent = isset($predefined[$parent]) ? $predefined[$parent] : 'page_' . sanitize_with_underscores($parent);
                 }
@@ -312,7 +312,7 @@ class i8Core {
             }
 
 
-            # activate MTB engine if needed
+            # activate CRT engine if needed
             if (strpos($handle, '/') !== false)  // must be slash separated Ctrl/Action pair
             {
                 /* controller action should be called before output is started (usually by admin-head.php), so page

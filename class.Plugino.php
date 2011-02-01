@@ -8,32 +8,32 @@ class Plugino extends i8Core {
 	function __construct()
 	{
 		parent::__construct();
-
-        $trace = debug_backtrace(false);
-        $this->__file__ = $trace[1]['file'];
+		
+		# probably it would be cleaner to pass a filename as an argument, but by now this is easier for developer
+		$trace = debug_backtrace(false);
+		$this->__file__ = $trace[1]['file'];
 		
 		# plugin urls and paths		
 		$plugin_dir = plugin_basename(dirname($this->__file__));
 		$this->url	= WP_PLUGIN_URL . '/' . $plugin_dir;
 		$this->path	= WP_PLUGIN_DIR . '/' . $plugin_dir;
-	
-	
+		
+		
 		# check if uninstall has called this, logic will break here, if it has
 		if ($this->_uninstalling())
 		{
 			add_action('uninstall_' . plugin_basename($this->__file__), array($this, '_uninstall'), 0);
 			return;
 		}
-
-        # update from private repository
-        if (isset($this->repo))
+		
+		# update from private repository
+		if (isset($this->repo))
 			add_filter('transient_update_plugins', array($this, '_check_4_updates'));
-
+		
 		register_activation_hook( $this->__file__, 		array($this, '_activation_operations') );
 		register_deactivation_hook( $this->__file__, 	array($this, '_deactivation_operations') );
-
+		
 		do_action("i8_{$this->namespace}initialized");
-        
     }
 	
 	
@@ -43,9 +43,9 @@ class Plugino extends i8Core {
 		parent::_activation_operations();
 		
 		register_uninstall_hook($this->__file__, '_uninstall');
-
-        if (method_exists($this, '_activate'))
-            $this->_activate();
+		
+		if (method_exists($this, '_activate'))
+			$this->_activate();
 	}
 	
 	
@@ -64,7 +64,6 @@ class Plugino extends i8Core {
 	
 	function _uninstall()
 	{
-	
 		// remove dummy callback
 		remove_action('uninstall_' . plugin_basename($this->__file__), '_uninstall');
 		
