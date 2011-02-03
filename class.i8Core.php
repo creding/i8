@@ -269,11 +269,13 @@ class i8Core {
 	
 			$defaults = array(
 				'handle' => "page_$title_sanitized",
-				'callback' => array(&$this, "page_$title_sanitized"),
 				'capability' => 10,
 				'icon_url' => ''
 			);
 			extract($this->pages[$i] = wp_parse_args($this->pages[$i], $defaults));
+			
+			if (!isset($callback))
+				$callback = array($this, $handle);	
 	
 	
 			# handle page parents and create them
