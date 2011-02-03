@@ -438,7 +438,7 @@ class i8Core {
 			?><div class="<?php echo $msg['class']; ?>"><p><?php echo $msg['message']; ?></p></div><?php
 		
 			if ($msg['critical'])
-				$this->deactivate();
+				$this->_deactivate();
 		}
 	}
 	
