@@ -381,10 +381,15 @@ class i8Core {
 	}
 	
 	
-	function _deactivation_operations() {}
+	function _deactivation_operations() 
+	{
+		if (method_exists($this, 'on_deactivate')) 
+			$this->on_deactivate();
+	}
 	
 	
-	function deactivate() {}
+	function _deactivate() {}
+	
 	
 	protected function register_activation_deactivation_hooks() {}
 	
