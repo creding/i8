@@ -376,6 +376,7 @@ class i8Core {
 		{
 			update_option("{$this->namespace}options", apply_filters("i8_options_4_upgrade_{$this->classname}", $this->defaults, $prev_version, $version));
 			update_option("{$this->namespace}version", $version);
+			update_option("{$this->namespace}info", $this->i8_data);
 		}
 	
 	

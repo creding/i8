@@ -99,6 +99,7 @@ class Plugino extends i8Core {
 		# delete options
 		delete_option("{$this->namespace}options");
 		delete_option("{$this->namespace}version");
+		delete_option("{$this->namespace}info");
 	}
 
 
