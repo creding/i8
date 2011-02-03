@@ -506,29 +506,40 @@ class i8Core {
 		if (empty($this->options))
 			return;
 		?>
-		<form method="post" action="options.php">
-		<?php settings_fields($this->options_handle); ?>
-		
-		<table class="form-table">
-		<?php foreach ($this->options as $name => $o) :  ?>
-		<tr valign="top">
-			<th scope="row"><label><?php echo $o['label']; ?></label></th>
-			<td>
-			<?php if (!empty($o['type'])) {
-				$method = "options_field_{$o['type']}";
-				if (method_exists($this, $method))
-					$this->$method($name, $o);
-			} ?>
-			</td>
-		</tr>
-		<?php endforeach; ?>
-		</table>  
-		
-		<p class="submit">
-		<input type="submit" name="Submit" class="button-primary" value="Save" />
-		</p>
-		
-		</form>	
+        <div id="wpbody-content">
+            <div class="wrap">
+                <div class="icon32" id="icon-options-general"><br></div>
+            	<h2>Settings</h2>
+            
+                <form method="post" action="options.php">
+                <?php settings_fields($this->options_handle); ?>
+                
+                <table class="form-table">
+                <?php foreach ($this->options as $name => $o) : 		
+                    if (is_array($o) && isset($o['type'])) : ?>
+                <tr valign="top">
+                    
+                    <th scope="row"><label><?php echo $o['label']; ?></label></th>
+                    <td><?php
+                        $method = "options_field_{$o['type']}";
+                        if (method_exists($this, $method))
+                            $this->$method($name, $o);
+                    ?></td>
+                </tr>
+                    <?php endif;
+                endforeach; ?>
+                </table>  
+                
+                <p class="submit">
+                <input type="submit" name="Submit" class="button-primary" value="Save" />
+                </p>
+                
+                </form>	
+            
+            </div>
+
+			<div class="clear"></div>
+        </div>
 		<?php	
 	}
 	
