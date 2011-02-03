@@ -458,11 +458,20 @@ class i8Core {
 	
 	function o($name, $value = false)
 	{
-		if (func_num_args() == 1)
-			return $this->options[$name];
+		if (func_num_args() == 1) 
+		{
+			if (is_array($this->options[$name]) && isset($this->options[$name]['value']))
+				return $this->options[$name]['value'];
+			else
+				return $this->options[$name];
+		} 
 		else
 		{
-			$this->options[$name] = $value;
+			if (is_array($this->options[$name]) && isset($this->options[$name]['value']))
+				$this->options[$name]['value'] = $value;
+			else
+				$this->options[$name] = $value;
+			
 			$this->options_update();
 		}
 	}
@@ -544,11 +553,8 @@ class i8Core {
                 <p class="submit">
                 <input type="submit" name="Submit" class="button-primary" value="Save" />
                 </p>
-                
                 </form>	
-            
             </div>
-
 			<div class="clear"></div>
         </div>
 		<?php	
