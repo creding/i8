@@ -40,6 +40,9 @@ class i8Core {
 	
 		# retrieve version
 		$this->version = get_option("{$this->namespace}version");
+		
+		# retrieve other info
+		$this->info = get_option("{$this->namespace}info");
 	
 	
 		# add tables to global $wpdb object
@@ -512,12 +515,12 @@ class i8Core {
 	function options_form()
 	{
 		if (empty($this->options))
-			return;
+			return;		
 		?>
         <div id="wpbody-content">
             <div class="wrap">
                 <div class="icon32" id="icon-options-general"><br></div>
-            	<h2>Settings</h2>
+            	<h2><?php echo $this->info['Name']; ?> Settings</h2>
             
                 <form method="post" action="options.php">
                 <?php settings_fields($this->options_handle); ?>
