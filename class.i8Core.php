@@ -460,14 +460,14 @@ class i8Core {
 	{
 		if (func_num_args() == 1) 
 		{
-			if (is_array($this->options[$name]) && isset($this->options[$name]['value']))
+			if (is_array($this->options[$name]) && isset($this->options[$name]['type']))
 				return $this->options[$name]['value'];
 			else
 				return $this->options[$name];
 		} 
 		else
 		{
-			if (is_array($this->options[$name]) && isset($this->options[$name]['value']))
+			if (is_array($this->options[$name]) && isset($this->options[$name]['type']))
 				$this->options[$name]['value'] = $value;
 			else
 				$this->options[$name] = $value;
