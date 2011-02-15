@@ -76,6 +76,7 @@ class i8Core {
 		add_action('init', array($this, '_unauth_wp_ajax'));
 		add_action('admin_init', array($this, '_options_register'));
 		add_action('admin_menu', array($this, '_pages_add'));
+		add_action('admin_notices', array($this, '_admin_notices'));
 	
 		add_action("i8_{$this->namespace}initialized", array($this, '_load_addons'));
 	
@@ -153,17 +154,14 @@ class i8Core {
 	
 		switch ( $handle ) :
 			case 'a':
-			case 'pa':
 			case 'action':
 					add_action( $hook, array($this, $method), $priority, $accepted_args );
 					break;
 			case 'f':
-			case 'pf':
 			case 'filter':
 					add_filter( $hook, array($this, $method), $priority, $accepted_args );
 					break;
 			case 'sc':
-			case 'psc':
 			case 'shortcode':
 					add_shortcode( $hook, array($this, $method) );
 					break;
@@ -436,7 +434,7 @@ class i8Core {
 		$this->msgs[] = wp_parse_args($params, $defaults);
 	}
 	
-	function pa_admin_notices()
+	function _admin_notices()
 	{
 		if ( empty($this->msgs) ) return;
 		
