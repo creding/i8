@@ -537,19 +537,29 @@ class i8Core {
                     if (is_array($o) && isset($o['type'])) : ?>
                 <tr valign="top">
                     
-                    <th scope="row"><label><?php echo $o['label']; ?></label></th>
+                    <?php $method = "options_field_{$o['type']}";
+					if ($o['custom']) 
+					{ 
+					?><td colspan="2"><?php
+						if (method_exists($this, $method))
+                            $this->$method($name, $o);
+					?></td><?php 
+					}
+					else 
+					{ 
+					?><th scope="row"><label><?php echo $o['label']; ?></label></th>
                     <td><?php
-                        $method = "options_field_{$o['type']}";
                         if (method_exists($this, $method))
                             $this->$method($name, $o);
-                    ?></td>
+					?></td><?php 
+					} ?>
                 </tr>
                     <?php endif;
                 endforeach; ?>
                 </table>  
                 
                 <p class="submit">
-                <input type="submit" name="Submit" class="button-primary" value="Save" />
+                	<input type="submit" name="Submit" class="button-primary" value="Save" />
                 </p>
                 </form>	
             </div>
