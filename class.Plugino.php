@@ -18,14 +18,13 @@ class Plugino extends i8Core {
 		} else {
 			# probably it would be cleaner to pass a filename as an argument, but by now this is easier for developer
 			$trace = debug_backtrace(false);
-			$this->__FILE__ = $trace[1]['file'];
+			$this->__FILE__ = $trace[0]['file'];
 		}
 		
 		# plugin urls and paths		
 		$plugin_dir = plugin_basename(dirname($this->__FILE__));
 		$this->url	= WP_PLUGIN_URL . '/' . $plugin_dir;
-		$this->path	= WP_PLUGIN_DIR . '/' . $plugin_dir;
-		
+		$this->path	= WP_PLUGIN_DIR . '/' . $plugin_dir;		
 		
 		# check if uninstall has called this, logic will break here, if it has
 		if ($this->_uninstalling())
