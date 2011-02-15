@@ -490,11 +490,16 @@ class i8Core {
 	
 	function options_validate($input)
 	{
-		# take care of password fields, which are emptied on show for security reasons
-		foreach ($input as $name => $o)
-			if (empty($o['value']) && 'password' == $this->options[$name]['type']) {
+		foreach ($this->options as $name => $o) {
+			# take care of password fields, which are emptied on show for security reasons
+			if ('password' == $this->options[$name]['type'] && empty($input[$name]['value'])) {
 				$input[$name]['value'] = $this->options[$name]['value'];
 			}
+			# provide value for checkboxes if not set
+			if ('checkbox' == $this->options[$name]['type'] && !isset($input[$name]['value'])) {
+				$input[$name]['value'] = 0;
+			}
+		}
 	
 		return apply_filters("i8_options_validate_{$this->classname}", $input);
 	}
@@ -579,6 +584,13 @@ class i8Core {
 	{
 		extract($o);
 		?><input type="password" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="" /> <?php echo $desc;
+	}
+	
+	
+	function options_field_checkbox($name, &$o)
+	{
+		extract($o);
+		?><input type="checkbox" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" value="1" /> <?php echo $desc;
 	}
 	
 	
