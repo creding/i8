@@ -18,14 +18,10 @@ class i8Core {
 		}
 	
 		# setting namespace for use in options, etc
-		$parent_class = get_parent_class($this);
-	
-		# set instance type
-		$this->i8 = strtolower($parent_class);
-	
 		$this->classname = get_class($this);
+		$parent_class = str_replace("{$this->classname}_", '', get_parent_class($this));
+		$this->i8 = strtolower($parent_class); // instance type
 		$this->namespace = $this->i8 . '_' . $this->classname . '_';
-	
 	
 		$upload_dir = wp_upload_dir();
 		$this->upload_url 	= $upload_dir['baseurl'];
