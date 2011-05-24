@@ -487,6 +487,9 @@ class i8Core {
 	function options_validate($input)
 	{
 		foreach ($this->options as $name => $o) {
+			if (!is_array($o) || !isset($o['type']))
+				continue;
+			
 			# provide value for checkboxes if not set
 			if ('checkbox' == $o['type'] && !isset($input[$name]['value'])) {
 				$input[$name]['value'] = 0;
