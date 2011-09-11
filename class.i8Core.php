@@ -510,8 +510,10 @@ class i8Core {
 	
 		if (empty($this->defaults))
 			$this->defaults = $this->options;
-	
-		return $this->options = array_merge_better($this->options, get_option($this->options_handle));
+				
+		$this->options = array_merge_better($this->options, get_option($this->options_handle));
+		
+		return $this->options;
 	}
 	
 	
@@ -651,6 +653,25 @@ class i8Core {
 			$querystr = '&' . http_build_query($params);
 		
 		return admin_url('admin.php') . "?page=$ctrl/$action" . $querystr;
+	}
+	
+	
+	/* handy methods */
+	
+	/**
+	 * Output the Widget by it's name and optionally override it's options
+	 */
+	static function the_widget($name, $instance = array()) 
+	{
+		static $count = 1;
+				
+		the_widget(wp_specialchars($name), $instance, array(
+			'widget_id' => 'arbitrary-instance-'.$count++,
+			'before_widget' => '',
+			'after_widget' => '',
+			'before_title' => '',
+			'after_title' => ''
+		));
 	}
 
 	

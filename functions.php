@@ -37,10 +37,11 @@ function array_merge_better($defaults, $r)
 
 		foreach ($r as $key => $value)
 		{
-			if (is_array($value) && is_array($defaults[$key]))
+			if (is_array($value) && is_array($defaults[$key])) {
 				$defaults[$key] = array_merge_better($defaults[$key], $value); 
-			else 	
+			} else {
 				$defaults[$key] = is_array($value) ? $value : trim($value);
+			}
 		}
 	}
 		
