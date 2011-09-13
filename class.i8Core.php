@@ -593,6 +593,17 @@ class i8Core {
 		?><input type="checkbox" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" value="1" <?php if ($value) echo 'checked="checked"'; ?> /> <?php echo $desc;
 	}
 	
+	function options_field_select($name, &$o)
+	{
+		extract($o);
+		
+		?><select name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>">
+        <?php foreach ((array)$items as $k => $v) { ?>
+        	<option value="<?php echo $k; ?>" <?php if ($k == $value) echo 'selected="selected"'; ?>><?php echo $v; ?></option>
+        <?php } ?>	
+        </select>  <?php echo $desc;
+	}
+	
 	
 	// Output
 	
