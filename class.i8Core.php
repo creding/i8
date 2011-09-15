@@ -535,35 +535,11 @@ class i8Core {
             	<h2><?php echo $this->info['Name']; ?> Settings</h2>
             
                 <form method="post" action="options.php">
-                <?php settings_fields($this->options_handle); ?>
-                
-                <table class="form-table">
-                <?php foreach ($this->options as $name => $o) : 		
-                    if (is_array($o) && isset($o['type'])) : ?>
-                <tr valign="top">
-                    
-                    <?php $method = "options_field_{$o['type']}";
-					if ($o['custom']) 
-					{ 
-					?><td colspan="2"><?php
-						if (method_exists($this, $method))
-                            $this->$method($name, $o);
-					?></td><?php 
-					}
-					else 
-					{ 
-					?><th scope="row"><label><?php echo $o['label']; ?></label></th>
-                    <td><?php
-                        if (method_exists($this, $method))
-                            $this->$method($name, $o);
-					?></td><?php 
-					} ?>
-                </tr>
-                    <?php endif;
-                endforeach; ?>
-                </table>  
-                
-                <p class="submit">
+                <?php settings_fields($this->options_handle); 
+				
+				$this->options_table($this->options);
+				
+				?><p class="submit">
                 	<input type="submit" name="Submit" class="button-primary" value="Save" />
                 </p>
                 </form>	
@@ -571,6 +547,36 @@ class i8Core {
 			<div class="clear"></div>
         </div>
 		<?php	
+	}
+	
+	
+	function options_table(&$options)
+	{
+		?><table class="form-table">
+		<?php foreach ($options as $name => $o) : 		
+            if (is_array($o) && isset($o['type'])) : ?>
+        <tr valign="top">
+            
+            <?php $method = "options_field_{$o['type']}";
+            if ($o['custom']) 
+            { 
+            ?><td colspan="2"><?php
+                if (method_exists($this, $method))
+                    $this->$method($name, $o);
+            ?></td><?php 
+            }
+            else 
+            { 
+            ?><th scope="row"><label><?php echo $o['label']; ?></label></th>
+            <td><?php
+                if (method_exists($this, $method))
+                    $this->$method($name, $o);
+            ?></td><?php 
+            } ?>
+        </tr>
+            <?php endif;
+        endforeach; ?>
+        </table><?php
 	}
 	
 	
