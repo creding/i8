@@ -696,6 +696,39 @@ class i8Core {
 			'after_title' => ''
 		));
 	}
+	
+	
+	/* cache management */
+	function get_cache($key)
+	{
+		$key = md5(maybe_serialize($key));
+		
+		$cache = get_option("{$this->namespace}cache", array());
+						
+		// purge outdated cache 
+		$now = time();
+		foreach ($cache as $id => $body) {
+			if ($body['expires'] < $now) { 
+				unset($cache[$id]);
+			}
+		}
+		update_option("{$this->namespace}cache", $cache);
+				
+		return (isset($cache[$key]) ? $cache[$key]['data'] : false);
+	}
+	
+	
+	function set_cache($key, $data, $expires = 3600)
+	{
+		$key = md5(maybe_serialize($key));
+		
+		$cache = get_option("{$this->namespace}cache", array());
+		
+		$expires += time();
+		
+		$cache[$key] = compact('data', 'expires');
+		update_option("{$this->namespace}cache", $cache);
+	}
 
 	
 }

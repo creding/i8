@@ -99,6 +99,11 @@ class Plugino extends i8Core {
 		delete_option("{$this->namespace}options");
 		delete_option("{$this->namespace}version");
 		delete_option("{$this->namespace}info");
+		delete_option("{$this->namespace}cache");
+		
+		if (method_exists($this, 'on_uninstall')) {
+			$this->on_uninstall($this->i8_data);
+		}
 	}
 
 
