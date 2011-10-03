@@ -583,20 +583,26 @@ class i8Core {
 	function options_field_text($name, &$o)
 	{
 		extract($o);
-		?><input type="text" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="<?php echo $value; ?>" /> <?php echo $desc;
+		?><input type="text" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="<?php echo $value; ?>" /> <span class="description"><?php echo $desc; ?></span><?php
+	}
+	
+	function options_field_textarea($name, &$o)
+	{
+		extract($o);
+		?><textarea name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>"><?php echo $value; ?></textarea><br /> <span class="description"><?php echo $desc; ?></span><?php
 	}
 	
 	function options_field_password($name, &$o)
 	{
 		extract($o);
-		?><input type="password" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="" /> <?php echo $desc;
+		?><input type="password" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" class="<?php echo $class; ?>" value="<?php echo $value; ?>" /> <span class="description"><?php echo $desc; ?></span><?php
 	}
 	
 	
 	function options_field_checkbox($name, &$o)
 	{
 		extract($o);
-		?><input type="checkbox" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" value="1" <?php if ($value) echo 'checked="checked"'; ?> /> <?php echo $desc;
+		?><input type="checkbox" name="<?php echo $this->options_handle; ?>[<?php echo $name; ?>][value]" value="1" <?php if ($value) echo 'checked="checked"'; ?> /> <span class="description"><?php echo $desc; ?></span><?php
 	}
 	
 	function options_field_select($name, &$o)
@@ -607,7 +613,7 @@ class i8Core {
         <?php foreach ((array)$items as $k => $v) { ?>
         	<option value="<?php echo $k; ?>" <?php if ($k == $value) echo 'selected="selected"'; ?>><?php echo $v; ?></option>
         <?php } ?>	
-        </select>  <?php echo $desc;
+        </select>  <span class="description"><?php echo $desc; ?></span><?php
 	}
 	
 	
